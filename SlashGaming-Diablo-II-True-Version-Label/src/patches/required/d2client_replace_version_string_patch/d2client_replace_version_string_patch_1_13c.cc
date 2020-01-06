@@ -87,7 +87,7 @@ std::vector<mapi::GamePatch> Make_D2Client_ReplaceVersionStringPatch_1_13C() {
       mapi::GamePatch::MakeGameBranchPatch(
           std::move(game_address_01),
           mapi::BranchType::kCall,
-          InterceptionFunc_01,
+          &InterceptionFunc_01,
           0x5FF20 - 0x5FF01
       )
   );

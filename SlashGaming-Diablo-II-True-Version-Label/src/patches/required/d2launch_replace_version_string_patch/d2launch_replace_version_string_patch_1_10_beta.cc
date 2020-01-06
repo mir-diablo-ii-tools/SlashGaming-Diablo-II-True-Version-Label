@@ -87,7 +87,7 @@ std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch_1_10Beta() 
       mapi::GamePatch::MakeGameBranchPatch(
           std::move(game_address_01),
           mapi::BranchType::kCall,
-          InterceptionFunc_01,
+          &InterceptionFunc_01,
           0x5458 - 0x5433
       )
   );
