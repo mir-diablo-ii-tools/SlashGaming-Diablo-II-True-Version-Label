@@ -43,24 +43,24 @@
  *  work.
  */
 
-#include "required_patches.hpp"
+#include "d2launch_replace_version_string_patch.hpp"
 
-#include "d2launch_replace_version_string_patch/d2launch_replace_version_string_patch.hpp"
+#include "d2launch_replace_version_string_patch_1_13c.hpp"
 
 namespace sgd2tvl::patches {
 
-std::vector<mapi::GamePatch> MakeRequiredPatches() {
-  std::vector<mapi::GamePatch> game_patches;
+std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch() {
+  d2::GameVersion running_game_version_id = d2::GetRunningGameVersionId();
 
-  std::vector d2launch_replace_version_string_patch =
-      Make_D2Launch_ReplaceVersionStringPatch();
-  game_patches.insert(
-      game_patches.end(),
-      std::make_move_iterator(d2launch_replace_version_string_patch.begin()),
-      std::make_move_iterator(d2launch_replace_version_string_patch.end())
-  );
+  switch (running_game_version_id) {
+    case d2::GameVersion::k1_13C: {
+      return Make_D2Launch_ReplaceVersionStringPatch_1_13C();
+    }
 
-  return game_patches;
+    default: {
+      return {};
+    }
+  }
 }
 
 } // namespace sgd2tvl::patches
