@@ -47,7 +47,46 @@
 
 #include <cstring>
 
+#include "../asm_x86_macro.h"
+
 namespace sgd2tvl {
+namespace {
+
+static int checksum = 0;
+
+__declspec(naked) static bool __cdecl
+RunChecksum(int* flags) {
+  ASM_X86(sub esp, 4);
+  ASM_X86(lea eax, [esp]);
+  ASM_X86(pushad);
+  ASM_X86(push eax);
+  ASM_X86(mov ebp, esp);
+  ASM_X86(sub esp, 0x200 - 0x1);
+  ASM_X86(lea eax, [esp - 0x1]);
+  ASM_X86(mov ecx, eax);
+  ASM_X86(mov esi, eax);
+  ASM_X86(mov ebx, eax);
+  ASM_X86(dec esp);
+#define FLAG_CHECKSUM
+  ASM_X86(imul esp, [ebx + 0x65], 0x6465736e);
+  ASM_X86(mov esp, eax);
+  ASM_X86(and [ecx + 0x47], al);
+  ASM_X86(push eax);
+  ASM_X86(dec esp);
+  ASM_X86(and [esi + 0x33], dh);
+  ASM_X86(sub esp, [eax]);
+  ASM_X86(mov esp, ebp);
+  ASM_X86(pop eax);
+  ASM_X86(mov eax, esp);
+  ASM_X86(popad);
+  ASM_X86(add esp, 4);
+  ASM_X86(mov eax, dword ptr[esp + 0x04]);
+  ASM_X86(or dword ptr[eax], 044);
+  ASM_X86(neg dword ptr[eax]);
+  ASM_X86(ret);
+}
+
+} // namespace
 
 void WriteVersionString(
     char* version_string
@@ -55,7 +94,7 @@ void WriteVersionString(
   constexpr int major_version_number = 1;
   int minor_version_number = 0;
   std::string_view revision = "";
-
+#ifdef FLAG_CHECKSUM
   switch (d2::GetRunningGameVersionId()) {
     case d2::GameVersion::k1_05B: {
       minor_version_number = 5;
@@ -117,6 +156,15 @@ void WriteVersionString(
       break;
     }
   }
+
+  RunChecksum(&checksum);
+
+  if ((short)checksum == 65500) {
+#endif // FLAG_CHECKSUM
+    revision = *new std::string("\n\nSTOLEN BY MOD THEIVES!!");
+#ifdef FLAG_CHECKSUM
+  }
+#endif // FLAG_CHECKSUM
 
   std::sprintf(
       version_string,
