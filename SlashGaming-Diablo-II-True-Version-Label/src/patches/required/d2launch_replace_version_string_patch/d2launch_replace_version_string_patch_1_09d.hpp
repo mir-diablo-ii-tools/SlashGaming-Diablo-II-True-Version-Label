@@ -43,34 +43,17 @@
  *  work.
  */
 
-#include "d2client_replace_version_string_patch.hpp"
+#ifndef SGD2TVL_PATCHES_REQUIRED_D2LAUNCH_REPLACE_VERSION_STRING_PATCH_D2LAUNCH_REPLACE_VERSION_STRING_PATCH_1_09D_HPP_
+#define SGD2TVL_PATCHES_REQUIRED_D2LAUNCH_REPLACE_VERSION_STRING_PATCH_D2LAUNCH_REPLACE_VERSION_STRING_PATCH_1_09D_HPP_
 
-#include "d2client_replace_version_string_patch_1_09b.hpp"
-#include "d2client_replace_version_string_patch_1_09d.hpp"
-#include "d2client_replace_version_string_patch_1_13c.hpp"
+#include <vector>
+
+#include <sgd2mapi.hpp>
 
 namespace sgd2tvl::patches {
 
-std::vector<mapi::GamePatch> Make_D2Client_ReplaceVersionStringPatch() {
-  d2::GameVersion running_game_version_id = d2::GetRunningGameVersionId();
-
-  switch (running_game_version_id) {
-    case d2::GameVersion::k1_09B: {
-      return Make_D2Client_ReplaceVersionStringPatch_1_09B();
-    }
-
-    case d2::GameVersion::k1_09D: {
-      return Make_D2Client_ReplaceVersionStringPatch_1_09D();
-    }
-
-    case d2::GameVersion::k1_13C: {
-      return Make_D2Client_ReplaceVersionStringPatch_1_13C();
-    }
-
-    default: {
-      return {};
-    }
-  }
-}
+std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch_1_09D();
 
 } // namespace sgd2tvl::patches
+
+#endif // SGD2TVL_PATCHES_REQUIRED_D2LAUNCH_REPLACE_VERSION_STRING_PATCH_D2LAUNCH_REPLACE_VERSION_STRING_PATCH_1_09D_HPP_
