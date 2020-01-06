@@ -43,29 +43,56 @@
  *  work.
  */
 
-#include "d2client_replace_version_string_patch.hpp"
+#include "d2launch_replace_version_string_patch_1_09b.hpp"
 
-#include "d2client_replace_version_string_patch_1_09b.hpp"
-#include "d2client_replace_version_string_patch_1_13c.hpp"
+#include "../../../asm_x86_macro.h"
+#include "d2launch_replace_version_string.hpp"
 
 namespace sgd2tvl::patches {
+namespace {
 
-std::vector<mapi::GamePatch> Make_D2Client_ReplaceVersionStringPatch() {
-  d2::GameVersion running_game_version_id = d2::GetRunningGameVersionId();
+__declspec(naked) void __cdecl InterceptionFunc_01() {
+  ASM_X86(push ebp);
+  ASM_X86(mov ebp, esp);
 
-  switch (running_game_version_id) {
-    case d2::GameVersion::k1_09B: {
-      return Make_D2Client_ReplaceVersionStringPatch_1_09B();
-    }
+  ASM_X86(push eax);
+  ASM_X86(push ecx);
+  ASM_X86(push edx);
 
-    case d2::GameVersion::k1_13C: {
-      return Make_D2Client_ReplaceVersionStringPatch_1_13C();
-    }
+  ASM_X86(lea eax, dword ptr [ebp + 20]);
+  ASM_X86(push eax);
+  ASM_X86(call ASM_X86_FUNC(SGD2TVL_D2Launch_WriteVersionString));
+  ASM_X86(add esp, 4);
 
-    default: {
-      return {};
-    }
-  }
+  ASM_X86(pop edx);
+  ASM_X86(pop ecx);
+  ASM_X86(pop eax);
+
+  ASM_X86(leave);
+  ASM_X86(ret);
+}
+
+} // namespace
+
+std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch_1_09B() {
+  std::vector<mapi::GamePatch> patches;
+
+  // Add additional check before choosing to minimize the window.
+  mapi::GameAddress game_address_01 = mapi::GameAddress::FromOffset(
+      mapi::DefaultLibrary::kD2Launch,
+      0x7FEE
+  );
+
+  patches.push_back(
+      mapi::GamePatch::MakeGameBranchPatch(
+          std::move(game_address_01),
+          mapi::BranchType::kCall,
+          &InterceptionFunc_01,
+          0x8012 - 0x7FEE
+      )
+  );
+
+  return patches;
 }
 
 } // namespace sgd2tvl::patches

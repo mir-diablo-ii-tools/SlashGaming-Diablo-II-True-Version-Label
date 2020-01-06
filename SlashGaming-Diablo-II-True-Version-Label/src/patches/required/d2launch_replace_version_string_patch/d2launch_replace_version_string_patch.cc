@@ -46,6 +46,7 @@
 #include "d2launch_replace_version_string_patch.hpp"
 
 #include "d2launch_replace_version_string_patch_1_05b.hpp"
+#include "d2launch_replace_version_string_patch_1_09b.hpp"
 #include "d2launch_replace_version_string_patch_1_13c.hpp"
 
 namespace sgd2tvl::patches {
@@ -57,6 +58,10 @@ std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch() {
     case d2::GameVersion::k1_05B:
     case d2::GameVersion::k1_06B: {
       return Make_D2Launch_ReplaceVersionStringPatch_1_05B();
+    }
+
+    case d2::GameVersion::k1_09B: {
+      return Make_D2Launch_ReplaceVersionStringPatch_1_09B();
     }
 
     case d2::GameVersion::k1_13C: {
