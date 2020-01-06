@@ -50,6 +50,7 @@
 #include "d2client_replace_version_string_patch_1_10_beta.hpp"
 #include "d2client_replace_version_string_patch_1_11b.hpp"
 #include "d2client_replace_version_string_patch_1_13c.hpp"
+#include "d2client_replace_version_string_patch_1_13d.hpp"
 
 namespace sgd2tvl::patches {
 
@@ -75,6 +76,10 @@ std::vector<mapi::GamePatch> Make_D2Client_ReplaceVersionStringPatch() {
 
     case d2::GameVersion::k1_13C: {
       return Make_D2Client_ReplaceVersionStringPatch_1_13C();
+    }
+
+    case d2::GameVersion::k1_13D: {
+      return Make_D2Client_ReplaceVersionStringPatch_1_13D();
     }
 
     default: {
