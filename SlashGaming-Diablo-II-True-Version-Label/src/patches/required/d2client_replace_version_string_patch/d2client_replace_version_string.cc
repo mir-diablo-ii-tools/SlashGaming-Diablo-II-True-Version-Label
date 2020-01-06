@@ -43,33 +43,16 @@
  *  work.
  */
 
-#include "required_patches.hpp"
+#include "d2client_replace_version_string.hpp"
 
-#include "d2client_replace_version_string_patch/d2client_replace_version_string_patch.hpp"
-#include "d2launch_replace_version_string_patch/d2launch_replace_version_string_patch.hpp"
+#include "../../../helper/version_string.hpp"
 
 namespace sgd2tvl::patches {
 
-std::vector<mapi::GamePatch> MakeRequiredPatches() {
-  std::vector<mapi::GamePatch> game_patches;
-
-  std::vector d2client_replace_version_string_patch =
-      Make_D2Client_ReplaceVersionStringPatch();
-  game_patches.insert(
-      game_patches.end(),
-      std::make_move_iterator(d2client_replace_version_string_patch.begin()),
-      std::make_move_iterator(d2client_replace_version_string_patch.end())
-  );
-
-  std::vector d2launch_replace_version_string_patch =
-      Make_D2Launch_ReplaceVersionStringPatch();
-  game_patches.insert(
-      game_patches.end(),
-      std::make_move_iterator(d2launch_replace_version_string_patch.begin()),
-      std::make_move_iterator(d2launch_replace_version_string_patch.end())
-  );
-
-  return game_patches;
+void __cdecl SGD2TVL_D2Client_WriteVersionString(
+    char* version_string
+) {
+  WriteVersionString(version_string);
 }
 
 } // namespace sgd2tvl::patches

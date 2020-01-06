@@ -45,90 +45,14 @@
 
 #include "d2launch_replace_version_string.hpp"
 
-#include <windows.h>
+#include "../../../helper/version_string.hpp"
 
 namespace sgd2tvl::patches {
 
 void __cdecl SGD2TVL_D2Launch_WriteVersionString(
     char* version_string
 ) {
-  constexpr int major_version_number = 1;
-  int minor_version_number = 0;
-  char revision = '\0';
-  std::string_view additional_text = "";
-
-  switch (d2::GetRunningGameVersionId()) {
-    case d2::GameVersion::k1_05B: {
-      minor_version_number = 5;
-      revision = 'b';
-      break;
-    }
-
-    case d2::GameVersion::k1_06B: {
-      minor_version_number = 6;
-      revision = 'b';
-      break;
-    }
-
-    case d2::GameVersion::k1_09B: {
-      minor_version_number = 9;
-      revision = 'b';
-      break;
-    }
-
-    case d2::GameVersion::k1_09D: {
-      minor_version_number = 9;
-      revision = 'd';
-      break;
-    }
-
-    case d2::GameVersion::k1_10Beta: {
-      minor_version_number = 10;
-      additional_text = "Beta";
-      break;
-    }
-
-    case d2::GameVersion::k1_10SBeta: {
-      minor_version_number = 10;
-      revision = 's';
-      additional_text = "Beta";
-      break;
-    }
-
-    case d2::GameVersion::k1_11B: {
-      minor_version_number = 11;
-      revision = 'b';
-      break;
-    }
-
-    case d2::GameVersion::k1_13ABeta: {
-      minor_version_number = 13;
-      revision = 'a';
-      additional_text = "PTR";
-      break;
-    }
-
-    case d2::GameVersion::k1_13C: {
-      minor_version_number = 13;
-      revision = 'c';
-      break;
-    }
-
-    case d2::GameVersion::k1_13D: {
-      minor_version_number = 13;
-      revision = 'd';
-      break;
-    }
-  }
-
-  std::snprintf(
-      version_string,
-      32,
-      "v %d.%02d%c",
-      major_version_number,
-      minor_version_number,
-      revision
-  );
+  WriteVersionString(version_string);
 }
 
 } // namespace sgd2tvl::patches
