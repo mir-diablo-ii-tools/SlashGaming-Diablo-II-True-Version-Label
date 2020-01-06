@@ -43,88 +43,56 @@
  *  work.
  */
 
-#include "version_string.hpp"
+#include "d2launch_replace_version_string_patch_1_13a_ptr.hpp"
 
-#include <cstring>
+#include "../../../asm_x86_macro.h"
+#include "d2launch_replace_version_string.hpp"
 
-namespace sgd2tvl {
+namespace sgd2tvl::patches {
+namespace {
 
-void WriteVersionString(
-    char* version_string
-) {
-  constexpr int major_version_number = 1;
-  int minor_version_number = 0;
-  std::string_view revision = "";
+__declspec(naked) void __cdecl InterceptionFunc_01() {
+  ASM_X86(push ebp);
+  ASM_X86(mov ebp, esp);
 
-  switch (d2::GetRunningGameVersionId()) {
-    case d2::GameVersion::k1_05B: {
-      minor_version_number = 5;
-      revision = "b";
-      break;
-    }
+  ASM_X86(push eax);
+  ASM_X86(push ecx);
+  ASM_X86(push edx);
 
-    case d2::GameVersion::k1_06B: {
-      minor_version_number = 6;
-      revision = "b";
-      break;
-    }
+  ASM_X86(lea eax, dword ptr [ebp + 20]);
+  ASM_X86(push eax);
+  ASM_X86(call ASM_X86_FUNC(SGD2TVL_D2Launch_WriteVersionString));
+  ASM_X86(add esp, 4);
 
-    case d2::GameVersion::k1_09B: {
-      minor_version_number = 9;
-      revision = "b";
-      break;
-    }
+  ASM_X86(pop edx);
+  ASM_X86(pop ecx);
+  ASM_X86(pop eax);
 
-    case d2::GameVersion::k1_09D: {
-      minor_version_number = 9;
-      revision = "d";
-      break;
-    }
-
-    case d2::GameVersion::k1_10Beta: {
-      minor_version_number = 10;
-      revision = " Beta";
-      break;
-    }
-
-    case d2::GameVersion::k1_10SBeta: {
-      minor_version_number = 10;
-      revision = "s Beta";
-      break;
-    }
-
-    case d2::GameVersion::k1_11B: {
-      minor_version_number = 11;
-      revision = "b";
-      break;
-    }
-
-    case d2::GameVersion::k1_13ABeta: {
-      minor_version_number = 13;
-      revision = "a";
-      break;
-    }
-
-    case d2::GameVersion::k1_13C: {
-      minor_version_number = 13;
-      revision = "c";
-      break;
-    }
-
-    case d2::GameVersion::k1_13D: {
-      minor_version_number = 13;
-      revision = "d";
-      break;
-    }
-  }
-
-  std::sprintf(
-      version_string,
-      "v %d.%02d%s",
-      major_version_number,
-      minor_version_number,
-      revision.data()
-  );
+  ASM_X86(leave);
+  ASM_X86(ret);
 }
 
-} // namespace sgd2tvl
+} // namespace
+
+std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch_1_13APtr() {
+  std::vector<mapi::GamePatch> patches;
+
+  // Add additional check before choosing to minimize the window.
+  mapi::GameAddress game_address_01 = mapi::GameAddress::FromOffset(
+      mapi::DefaultLibrary::kD2Launch,
+      0x1731B
+  );
+
+  patches.push_back(
+      mapi::GamePatch::MakeGameBranchPatch(
+          std::move(game_address_01),
+          mapi::BranchType::kCall,
+          &InterceptionFunc_01,
+          0x17332 - 0x1731B
+      )
+  );
+
+  return patches;
+}
+
+} // namespace sgd2tvl::patches

@@ -50,6 +50,7 @@
 #include "d2launch_replace_version_string_patch_1_09d.hpp"
 #include "d2launch_replace_version_string_patch_1_10_beta.hpp"
 #include "d2launch_replace_version_string_patch_1_11b.hpp"
+#include "d2launch_replace_version_string_patch_1_13a_ptr.hpp"
 #include "d2launch_replace_version_string_patch_1_13c.hpp"
 #include "d2launch_replace_version_string_patch_1_13d.hpp"
 
@@ -78,6 +79,10 @@ std::vector<mapi::GamePatch> Make_D2Launch_ReplaceVersionStringPatch() {
 
     case d2::GameVersion::k1_11B: {
       return Make_D2Launch_ReplaceVersionStringPatch_1_11B();
+    }
+
+    case d2::GameVersion::k1_13ABeta: {
+      return Make_D2Launch_ReplaceVersionStringPatch_1_13APtr();
     }
 
     case d2::GameVersion::k1_13C: {

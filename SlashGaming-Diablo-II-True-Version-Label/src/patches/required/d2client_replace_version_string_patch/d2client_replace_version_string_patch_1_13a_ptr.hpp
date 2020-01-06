@@ -43,88 +43,17 @@
  *  work.
  */
 
-#include "version_string.hpp"
+#ifndef SGD2TVL_PATCHES_REQUIRED_D2CLIENT_REPLACE_VERSION_STRING_PATCH_D2CLIENT_REPLACE_VERSION_STRING_PATCH_1_13A_PTR_HPP_
+#define SGD2TVL_PATCHES_REQUIRED_D2CLIENT_REPLACE_VERSION_STRING_PATCH_D2CLIENT_REPLACE_VERSION_STRING_PATCH_1_13A_PTR_HPP_
 
-#include <cstring>
+#include <vector>
 
-namespace sgd2tvl {
+#include <sgd2mapi.hpp>
 
-void WriteVersionString(
-    char* version_string
-) {
-  constexpr int major_version_number = 1;
-  int minor_version_number = 0;
-  std::string_view revision = "";
+namespace sgd2tvl::patches {
 
-  switch (d2::GetRunningGameVersionId()) {
-    case d2::GameVersion::k1_05B: {
-      minor_version_number = 5;
-      revision = "b";
-      break;
-    }
+std::vector<mapi::GamePatch> Make_D2Client_ReplaceVersionStringPatch_1_13APtr();
 
-    case d2::GameVersion::k1_06B: {
-      minor_version_number = 6;
-      revision = "b";
-      break;
-    }
+} // namespace sgd2tvl::patches
 
-    case d2::GameVersion::k1_09B: {
-      minor_version_number = 9;
-      revision = "b";
-      break;
-    }
-
-    case d2::GameVersion::k1_09D: {
-      minor_version_number = 9;
-      revision = "d";
-      break;
-    }
-
-    case d2::GameVersion::k1_10Beta: {
-      minor_version_number = 10;
-      revision = " Beta";
-      break;
-    }
-
-    case d2::GameVersion::k1_10SBeta: {
-      minor_version_number = 10;
-      revision = "s Beta";
-      break;
-    }
-
-    case d2::GameVersion::k1_11B: {
-      minor_version_number = 11;
-      revision = "b";
-      break;
-    }
-
-    case d2::GameVersion::k1_13ABeta: {
-      minor_version_number = 13;
-      revision = "a";
-      break;
-    }
-
-    case d2::GameVersion::k1_13C: {
-      minor_version_number = 13;
-      revision = "c";
-      break;
-    }
-
-    case d2::GameVersion::k1_13D: {
-      minor_version_number = 13;
-      revision = "d";
-      break;
-    }
-  }
-
-  std::sprintf(
-      version_string,
-      "v %d.%02d%s",
-      major_version_number,
-      minor_version_number,
-      revision.data()
-  );
-}
-
-} // namespace sgd2tvl
+#endif // SGD2TVL_PATCHES_REQUIRED_D2CLIENT_REPLACE_VERSION_STRING_PATCH_D2CLIENT_REPLACE_VERSION_STRING_PATCH_1_13A_PTR_HPP_
