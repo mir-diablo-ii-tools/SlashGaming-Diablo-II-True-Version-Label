@@ -59,7 +59,7 @@ __declspec(naked) void __cdecl InterceptionFunc_01() {
   ASM_X86(push ecx);
   ASM_X86(push edx);
 
-  ASM_X86(lea eax, dword ptr [ebp + 16])
+  ASM_X86(lea eax, dword ptr [ebp + 16]);
   ASM_X86(push eax);
   ASM_X86(call ASM_X86_FUNC(SGD2TVL_D2Launch_WriteVersionString));
   ASM_X86(add esp, 4);
